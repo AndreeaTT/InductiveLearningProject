@@ -287,10 +287,14 @@ Background \wedge Hypothesis \wedge Descriptions \models Classifications
 \end{equation}
 	Ecuatia ~\ref{eq:1} prezinta ideea de baza a subramurii, prin care exemplele vor fi descrise atat de cunostiintele generale despre mediu cat si de ipoteze. La fel ca si algoritmii inductive learning, algoritmi acestei subramuri vor trebui sa gaseasca ipoteze simple consistente cu contrangerea ~\ref{eq:1}, fiind cunoscute atat descrierile si clasificarile setului de exemple, cat si cunostiintele generale. Cunostiintele despre mediul descris ajuta la gasirea unei solutii(ipoteze) mai bune si reduce spatiul de cautare a acesteia.\\
 	In continuare va fi prezentata o metoda de realizare a algoritmilor Knowledge-Based Inductive Learning, metoda ce foloseste o generalizare a metodelor bazate pe arbori de decizie. Numele ei  este \textbf{Top-down inductive learning} si presupune pornirea de la ipoteza generala si specializarea acesteia in functie de setul de exemple pana la consistenta cu acesta al ipotezei. \\
-	Exemplele din setul de date sunt impartite in \textit{exemple pozitive} si \textit{exemple negative}, unde clasificarea este 
+	Exemplele din setul de date sunt impartite in \textit{exemple pozitive} si \textit{exemple negative}, unde clasificarea acestora este realizata in functie de conceptul ce se doreste a fi invatat prin algoritm. Metoda contruieste treptat clauze, literal cu literal, pana cand un subset din exemplele pozitive si toate exemplele negative sunt indeplinite de aceasta clauza. Acest pas continua prin adaugarea clauzei la ipoteza creata(specializare) si cu eliminarea exemplelor pozitive care sunt clasificate corect de clauza gasita anterior, dupa care procedeul este reluat pana cand setul exemplelor pozitive ce nu corespunde cu ipoteza invatate devine vid.\\
+	Aceasta metoda utilizeaza o functie euristica pentru alegerea literalului ce va fi adaugat in fiecare pas al algoritmului din multimea tuturor posibililor literali ce pot fi adaugati la clauza.\\
+	In continuare va fi explicat algoritmul PFOIL, algoritm din ramura Knowledge-Based Inductive Learning implementat prin metoda Top-down inductive learning, si functia euristica utilizata de acest algoritm se bazeaza pe masurarea incertitudinii reduse prin alegerea unui anumit literal.
+
+\newpage
 \begin{algorithm}
 \label{alg:eval}
-\caption{Algoritmul PFOIL}
+\caption{Algoritmul PFOIL} \label{eq:2}
 
 \textbf{function} PFOIL($positive\ example$, $negative\ example$)\\
 \KwIn{$positive\ example$ - setul de exemple pozitive\\
@@ -325,6 +329,8 @@ $DNF$ $\leftarrow$ \{ \}
 
 \end{algorithm}
 
+	Algoritmul PFOIL ~\ref{eq:2} construieste o ipoteza in DNF care sa generalizeze setul de exemple pozitive si negative transmise ca si parametrii. Porneste de la setul exemplelor pozitive si adauga cate un termen in ipoteza(initial vida) pana cand setul exemplelor pozitive devine nul(ipoteza clasifica corect toate exemplele pozitive). Fiecare executie a buclei externe adauga un termen la ipoteza si elimina din setul exemplelor pozitive exemplele care sunt clasificate corect de noul termen. Fiecare executie a buclei interne adauga un literal la termenul curent folosindu-se de metrica \textbf{information gain} pentru a determina cel mai bun literal ce poate fi adaugat. Dupa alegerea literalului, exemplele negative ce nu il satisfac sunt eliminate din setul exemplelor negative(sunt negative pentru literal) si exemplele pozitive ce nu il satisfac sunt, de asemenea, eliminate din setul exemplelor pozitive(sunt negative pentru literal). Bucla interna isi termina executia la gasirea unui termen alcatuit din literali care clasifica negativ toate exemplele negative si un subset din exemplele pozitive. In acest punct, termenul este adaugat la ipoteza, setul exemplelor negative este refacut la cel initial, din setul exemplelor pozitive sunt eliminate acele exemple ce satisfac termenul curent si se reexecuta bucla interna pentru gasirea unui nou termen pe acest set de exemple pozitive.\\
+	Algoritmul determina o ipoteza care generalizeaza atat setul de exemple pozitive, cat si setul de exemple negative, intrucat bucla interna se asigura ca termenul curent generalizeaza setul exemplelor negative si bucla externa se asigura ca fiecare termen adaugat va generaliza un subset din setul exemplelor pozitive pana ce toate aceste exemple vor ajunge sa fie generalizate.
 
 \section{Exercises}
 \begin{enumerate}
